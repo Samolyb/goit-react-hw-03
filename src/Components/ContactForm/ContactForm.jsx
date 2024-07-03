@@ -1,59 +1,46 @@
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import { useId } from "react";
-import { nanoid } from "nanoid";
-import * as Yup from "yup";
-import css from "./ContactForm"
-
-import { FaUserPlus, FaPhone, FaUser } from "react-icons/fa6";
-
+import React from 'react';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { nanoid } from 'nanoid';
+import * as Yup from 'yup';
+import { FaUser, FaPhoneAlt, FaUserPlus } from 'react-icons/fa';
+import css from './ContactForm.module.css';
 
 const ContactShema = Yup.object().shape({
     name: Yup.string()
         .trim()
-        .min(3, "Please enter your name. Minimum length of three characters.")
-        .max(50, "Too long!")
-        .required("This field is required"),
+        .min(3, 'Please enter your name. Minimum length of three characters.')
+        .max(50, 'Too long!')
+        .required('This field is required'),
     number: Yup.string()
-        .min(
-            10,
-            "Please enter your phone number. The minimum length is ten digits without a dash/thirteen with a dash."
-        )
-        .max(13, "Too long!")
-        .required("This field is required"),
+        .min(10, 'Please enter your phone number. Minimum length is ten digits.')
+        .max(13, 'Too long!')
+        .required('This field is required'),
 });
 
-export const ContactForm = ({ onAdd }) => {
-
-    const nameId = useId();
-    const numberId = useId();
-
+const ContactForm = ({ onAdd }) => {
     return (
-        <Formik initialValues={{
-            name: "",
-            number: "",
-        }}
-
+        <Formik
+            initialValues={{ name: '', number: '' }}
             validationSchema={ContactShema}
             onSubmit={(values, actions) => {
                 onAdd({ id: nanoid(), ...values });
                 actions.resetForm();
             }}
         >
-
             <Form className={css.form}>
                 <div className={css.labelName}>
-                    <label htmlFor={nameId}>Name</label>
-                    <Field className={css.field} name="name" id={nameId} />
+                    <label htmlFor="name">Name</label>
+                    <Field className={css.field} name="name" id="name" />
                     <FaUser className={css.icon} />
-                    <span className={css.message}>
+                    <span className={css.errorMessage}>
                         <ErrorMessage name="name" />
                     </span>
                 </div>
-                <div className={css.labelNumber}>
-                    <label htmlFor={numberId}>Number</label>
-                    <Field className={css.field} name="number" id={numberId} />
-                    <FaPhone className={css.icon} />
-                    <span className={css.message}>
+                <div className={css.labelName}>
+                    <label htmlFor="number">Number</label>
+                    <Field className={css.field} name="number" id="number" />
+                    <FaPhoneAlt className={css.icon} />
+                    <span className={css.errorMessage}>
                         <ErrorMessage name="number" />
                     </span>
                 </div>
@@ -62,7 +49,8 @@ export const ContactForm = ({ onAdd }) => {
                     Add Contact
                 </button>
             </Form>
-
         </Formik>
     );
-}
+};
+
+export default ContactForm;
